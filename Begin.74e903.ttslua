@@ -1,0 +1,172 @@
+setuplog=0
+
+
+EVENT_CARDS=Global.getVar("EVENT_CARDS")
+MONSTER_CARDS=Global.getVar("MONSTER_CARDS")
+ARTEFACT_CARDS=Global.getVar("ARTEFACT_CARDS")
+COMBAT_CARDS=Global.getVar("COMBAT_CARDS")
+TEMPLE_CARDS=Global.getVar("TEMPLE_CARDS")
+PROPHECY_CARDS=Global.getVar("PROPHECY_CARDS")
+CONSTRUCT_CARDS=Global.getVar("CONSTRUCT_CARDS")
+PANDORA_CARDS=Global.getVar("PANDORA_CARDS")
+HEROS_BAG=Global.getVar("HEROS_BAG")
+GODS_BAG=Global.getVar("GODS_BAG")
+
+
+APOLLO_TILE=Global.getVar("APOLLO_TILE")
+HADES_TILE=Global.getVar("HADES_TILE")
+POSEIDON_TILE=Global.getVar("POSEIDON_TILE")
+HEPHESTOS_TILE=Global.getVar("HEPHESTOS_TILE")
+
+BENDITION_CARDS=Global.getVar("BENDITION_CARDS")
+APOLLO_CARDS=Global.getVar("APOLLO_CARDS")
+HADES_CARDS=Global.getVar("HADES_CARDS")
+POSEIDON_CARDS=Global.getVar("POSEIDON_CARDS")
+HEPHESTOS_CARDS=Global.getVar("HEPHESTOS_CARDS")
+
+
+APOLLO_ARTEFACT=Global.getVar("APOLLO_ARTEFACT")
+POSEIDON_ARTEFACT=Global.getVar("POSEIDON_ARTEFACT")
+HEPHESTOS_ARTEFACT=Global.getVar("HEPHESTOS_ARTEFACT")
+HADES_ARTEFACT=Global.getVar("HADES_ARTEFACT")
+ATHENA_ARTEFACT=Global.getVar("ATHENA_ARTEFACT")
+
+function setUp(clicked_object, player, color)
+
+setuplog=setuplog+1
+     --randomCards(EVENT_CARDS)
+     randomCards(MONSTER_CARDS)
+     randomCards(ARTEFACT_CARDS)
+
+     randomCards(TEMPLE_CARDS)
+     randomCards(PROPHECY_CARDS)
+     randomCards(CONSTRUCT_CARDS)
+     randomCards(PANDORA_CARDS)
+
+      randomCards(COMBAT_CARDS)
+      deal(COMBAT_CARDS)
+      deal(HEROS_BAG)
+
+      setContructCards()
+      setTempleCards()
+      setEventsCards()
+      setLastGod()
+      printToAll('(#SETUP:' .. setuplog .. ') by' .. player)
+end
+
+function randomCards(cards)
+
+  local cards = getObjectFromGUID(cards)
+
+  cards.shuffle()
+  cards.shuffle()
+  cards.shuffle()
+end
+
+function deal(dealType)
+    local dealObject = getObjectFromGUID(dealType)
+    dealObject.deal(1)
+end
+
+function setTempleCards()
+  local deck = getObjectFromGUID(TEMPLE_CARDS)
+  local deckPos = deck.getPosition()
+  local xPos = deckPos[1] - 6
+  deck.takeObject({flip=true, position={xPos, deckPos[2], deckPos[3]}})
+
+end
+
+function setContructCards()
+    local deck = getObjectFromGUID(CONSTRUCT_CARDS)
+    local deckPos = deck.getPosition()
+    local yPos = deckPos[3] + 3
+    for i = 1, 3 do
+        deck.takeObject({flip=true, position={deckPos[1], deckPos[2], yPos}})
+        yPos = yPos + 3
+    end
+end
+
+function setEventsCards()
+    local deck = getObjectFromGUID(EVENT_CARDS)
+    local deckPos = deck.getPosition()
+    local yPos = deckPos[3] - 5
+
+    local questCounter=0
+    local notValidCards={}
+
+    for indexCards = 1, 7 do
+        validate=true
+        card=deck.takeObject({flip=true, position={deckPos[1], deckPos[2], yPos}})
+        if card.hasTag("questCard") then
+
+          questCounter=questCounter+1
+          if questCounter==3 then
+             table.insert(notValidCards, card)
+             validate=false
+             indexCards=indexCards-1
+          end
+        end
+
+        if validate then
+          yPos = yPos - 5
+        end
+    end 
+
+end
+function setLastGod()
+  local godBag = getObjectFromGUID(GODS_BAG)
+  local deckPos = godBag.getPosition()
+  local xPos = deckPos[1] - 6
+  god=godBag.takeObject({smooth=true, position={xPos, deckPos[2]+5, deckPos[3]}})
+
+
+  if      god.guid == APOLLO_TILE   then setApollo()
+  elseif  god.guid == HADES_TILE    then setHades()
+  elseif  god.guid == POSEIDON_TILE then setPoseidon()
+  else
+    setHephestos()
+  end
+end
+
+function setApollo()
+   printToAll("APOLLO_TILE")
+   local deck = getObjectFromGUID(APOLLO_CARDS)
+   setGodsCards(deck)
+   local godArtefact= getObjectFromGUID(APOLLO_ARTEFACT)
+   setGodArtefact(godArtefact)
+end
+function setPoseidon ()
+  printToAll("POSEIDON_TILE")
+     local deck = getObjectFromGUID(POSEIDON_CARDS)
+     setGodsCards(deck)
+     local godArtefact= getObjectFromGUID(POSEIDON_ARTEFACT)
+     setGodArtefact(godArtefact)
+end
+function setHephestos()
+  printToAll("HEPHESTOS_TILE")
+   local deck = getObjectFromGUID(HEPHESTOS_CARDS)
+   setGodsCards(deck)
+   local godArtefact= getObjectFromGUID(HEPHESTOS_ARTEFACT)
+   setGodArtefact(godArtefact)
+end
+function setHades()
+  printToAll("HADES_TILE")
+   local deck = getObjectFromGUID(HADES_CARDS)
+   setGodsCards(deck)
+   local godArtefact= getObjectFromGUID(HADES_ARTEFACT)
+   setGodArtefact(godArtefact)
+end
+
+function setGodsCards(godCards)
+  local deck = getObjectFromGUID(BENDITION_CARDS)
+  local deckPos = deck.getPosition()
+  deckPos[2]=deckPos[2]+1
+  godCards.setPositionSmooth(deckPos, false, false)
+  Wait.time(function() deck.shuffle() printToAll("SHUFFLE") end , 3, 1)
+end
+function setGodArtefact(godArtefact)
+   local athenArtefact= getObjectFromGUID(ATHENA_ARTEFACT)
+   local deckPos = athenArtefact.getPosition()
+   deckPos[3]=deckPos[3]-3
+   godArtefact.setPositionSmooth(deckPos, false, false)
+end
