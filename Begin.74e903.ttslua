@@ -59,7 +59,7 @@ function setUp(clicked_object, player, color)
       randomCards(PANDORA_CARDS)
       setPandora()
 
-      --setLastGod() 
+      setLastGod()
 
 end
 
@@ -181,6 +181,7 @@ function setPandora()
 
 end
 
+
 function setLastGod()
   local godBag = getObjectFromGUID(GODS_BAG)
   local deckPos = godBag.getPosition()
@@ -188,12 +189,9 @@ function setLastGod()
   god=godBag.takeObject({smooth=true, position={deckPos[1], deckPos[2]+5, deckPos[3]}})
 
 
-  if      god.guid == APOLLO_TILE   then
-    setApollo()
-  elseif  god.guid == HADES_TILE    then
-    setHades()
-  elseif  god.guid == POSEIDON_TILE then
-    setPoseidon()
+  if      god.guid == APOLLO_TILE   then setApollo()
+  elseif  god.guid == HADES_TILE    then setHadesx()
+  elseif  god.guid == POSEIDON_TILE then setPoseidon()
   else
     setHephestos()
   end
@@ -223,7 +221,7 @@ function setHephestos()
    setGodArtefact(godArtefact)
 end
 
-function setHades()
+function setHadesx()
   printToAll("HADES_TILE")
    local deck = getObjectFromGUID(HADES_CARDS)
    setGodsCards(deck)
