@@ -32,6 +32,8 @@ POSEIDON_ARTEFACT="844ec5"
 HEPHESTOS_ARTEFACT="efbdb9"
 HADES_ARTEFACT="a03d03"
 ATHENA_ARTEFACT="64854f"
+
+EVENTCARD_ZONE="18a9f5"
 --[[ The onLoad event is called after the game save finishes loading. --]]
 function onLoad()
 

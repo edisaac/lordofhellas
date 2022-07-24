@@ -2,6 +2,8 @@ setuplog=0
 
 
 EVENT_CARDS=Global.getVar("EVENT_CARDS")
+EVENTCARD_ZONE=Global.getVar("EVENTCARD_ZONE")
+
 MONSTER_CARDS=Global.getVar("MONSTER_CARDS")
 ARTEFACT_CARDS=Global.getVar("ARTEFACT_CARDS")
 COMBAT_CARDS=Global.getVar("COMBAT_CARDS")
@@ -33,25 +35,32 @@ ATHENA_ARTEFACT=Global.getVar("ATHENA_ARTEFACT")
 
 function setUp(clicked_object, player, color)
 
-setuplog=setuplog+1
-     --randomCards(EVENT_CARDS)
+     setuplog=setuplog+1
+
      randomCards(MONSTER_CARDS)
      randomCards(ARTEFACT_CARDS)
-
-     randomCards(TEMPLE_CARDS)
      randomCards(PROPHECY_CARDS)
-     randomCards(CONSTRUCT_CARDS)
-     randomCards(PANDORA_CARDS)
+
+
 
       randomCards(COMBAT_CARDS)
       deal(COMBAT_CARDS)
       deal(HEROS_BAG)
 
+      randomCards(CONSTRUCT_CARDS)
       setContructCards()
+
+      randomCards(TEMPLE_CARDS)
       setTempleCards()
+
+      randomCards(EVENT_CARDS)
       setEventsCards()
-      setLastGod()
-      printToAll('(#SETUP:' .. setuplog .. ') by' .. player)
+
+      randomCards(PANDORA_CARDS)
+      setPandora()
+
+      --setLastGod() 
+
 end
 
 function randomCards(cards)
@@ -86,43 +95,105 @@ function setContructCards()
     end
 end
 
+
+function validateMonster(monsterList, monster)
+
+  local monsterFounded=false
+  for _,v in pairs(monsterList) do
+    if v == monster then
+      monsterFounded= true
+      break
+    end
+  end
+  return monsterFounded
+
+end
+
 function setEventsCards()
     local deck = getObjectFromGUID(EVENT_CARDS)
     local deckPos = deck.getPosition()
-    local yPos = deckPos[3] - 5
+    local yPos = deckPos[3] - 8
 
-    local questCounter=0
     local notValidCards={}
 
-    for indexCards = 1, 7 do
+    local questCounter=0
+    local indexCards=0
+
+    local monsterList={}
+    while(indexCards<7)  do
         validate=true
-        card=deck.takeObject({flip=true, position={deckPos[1], deckPos[2], yPos}})
+        indexCards=indexCards+1
+
+        card=deck.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2], yPos}})
         if card.hasTag("questCard") then
 
           questCounter=questCounter+1
-          if questCounter==3 then
-             table.insert(notValidCards, card)
+
+          if questCounter>3 then
+             printToAll('questCard:'.. questCounter)
              validate=false
-             indexCards=indexCards-1
           end
+        elseif  card.hasTag("oportunityCard")   then setHades()
+            printToAll('oportunityCard:')
+            validate=false
+        else
+            local ltags=card.getTags()
+            local monsterName=ltags[1]
+            printToAll(monsterName)
+            if (validateMonster(monsterList,monsterName)) then
+              validate=false
+            else
+              table.insert(monsterList,ltags[1])
+            end
+
         end
 
         if validate then
           yPos = yPos - 5
+          card.flip()
+        else
+          table.insert(notValidCards, card)
+          indexCards=indexCards-1
+
+          card.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
+          table.insert(notValidCards,card)
         end
-    end 
+    end
+
+    for i, notValidCard in ipairs(notValidCards) do
+      notValidCard.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
+    end
 
 end
+
+function setPandora()
+    local deckEvent = getObjectFromGUID(EVENT_CARDS)
+    local deckPandora = getObjectFromGUID(PANDORA_CARDS)
+    local cardZone = getObjectFromGUID(EVENTCARD_ZONE)
+
+
+    local deckPos = cardZone.getPosition()
+
+    for i = 1, 3 do
+     deckEvent.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+math.random(1, 20), deckPos[3]}})
+   end
+    deckPandora.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+math.random(1, 20), deckPos[3]}})
+
+end
+
 function setLastGod()
   local godBag = getObjectFromGUID(GODS_BAG)
   local deckPos = godBag.getPosition()
-  local xPos = deckPos[1] - 6
-  god=godBag.takeObject({smooth=true, position={xPos, deckPos[2]+5, deckPos[3]}})
+  deckPos[1] = deckPos[1] - 6
+  god=godBag.takeObject({smooth=true, position={deckPos[1], deckPos[2]+5, deckPos[3]}})
 
 
-  if      god.guid == APOLLO_TILE   then setApollo()
-  elseif  god.guid == HADES_TILE    then setHades()
-  elseif  god.guid == POSEIDON_TILE then setPoseidon()
+  if      god.guid == APOLLO_TILE   then
+    setApollo()
+  elseif  god.guid == HADES_TILE    then
+    setHades()
+  elseif  god.guid == POSEIDON_TILE then
+    setPoseidon()
   else
     setHephestos()
   end
@@ -135,6 +206,7 @@ function setApollo()
    local godArtefact= getObjectFromGUID(APOLLO_ARTEFACT)
    setGodArtefact(godArtefact)
 end
+
 function setPoseidon ()
   printToAll("POSEIDON_TILE")
      local deck = getObjectFromGUID(POSEIDON_CARDS)
@@ -142,6 +214,7 @@ function setPoseidon ()
      local godArtefact= getObjectFromGUID(POSEIDON_ARTEFACT)
      setGodArtefact(godArtefact)
 end
+
 function setHephestos()
   printToAll("HEPHESTOS_TILE")
    local deck = getObjectFromGUID(HEPHESTOS_CARDS)
@@ -149,6 +222,7 @@ function setHephestos()
    local godArtefact= getObjectFromGUID(HEPHESTOS_ARTEFACT)
    setGodArtefact(godArtefact)
 end
+
 function setHades()
   printToAll("HADES_TILE")
    local deck = getObjectFromGUID(HADES_CARDS)
@@ -161,9 +235,10 @@ function setGodsCards(godCards)
   local deck = getObjectFromGUID(BENDITION_CARDS)
   local deckPos = deck.getPosition()
   deckPos[2]=deckPos[2]+1
-  godCards.setPositionSmooth(deckPos, false, false)
-  Wait.time(function() deck.shuffle() printToAll("SHUFFLE") end , 3, 1)
+  godCards.setPosition(deckPos, false, false)
+  Wait.time(function() deck.shuffle()  end , 3, 1)
 end
+
 function setGodArtefact(godArtefact)
    local athenArtefact= getObjectFromGUID(ATHENA_ARTEFACT)
    local deckPos = athenArtefact.getPosition()
