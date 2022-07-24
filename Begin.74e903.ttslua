@@ -41,8 +41,6 @@ function setUp(clicked_object, player, color)
      randomCards(ARTEFACT_CARDS)
      randomCards(PROPHECY_CARDS)
 
-
-
       randomCards(COMBAT_CARDS)
       deal(COMBAT_CARDS)
       deal(HEROS_BAG)
@@ -54,11 +52,13 @@ function setUp(clicked_object, player, color)
       setTempleCards()
 
       randomCards(EVENT_CARDS)
-      setEventsCards()
 
       randomCards(PANDORA_CARDS)
-      setPandora()
-
+      Wait.time(function()
+        setEventCards()
+        Wait.time(function() setPandora() end , 1, 1)
+        end , 2, 1)
+        
       setLastGod()
 
 end
@@ -109,7 +109,7 @@ function validateMonster(monsterList, monster)
 
 end
 
-function setEventsCards()
+function setEventCards()
     local deck = getObjectFromGUID(EVENT_CARDS)
     local deckPos = deck.getPosition()
     local yPos = deckPos[3] - 8
@@ -123,9 +123,8 @@ function setEventsCards()
     while(indexCards<7)  do
         validate=true
         indexCards=indexCards+1
-
-        card=deck.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2], yPos}})
-        if card.hasTag("questCard") then
+        local cardTaken=deck.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+10, yPos}})
+        if cardTaken.hasTag("questCard") then
 
           questCounter=questCounter+1
 
@@ -133,11 +132,11 @@ function setEventsCards()
              printToAll('questCard:'.. questCounter)
              validate=false
           end
-        elseif  card.hasTag("oportunityCard")   then setHades()
+        elseif  cardTaken.hasTag("oportunityCard")   then
             printToAll('oportunityCard:')
             validate=false
         else
-            local ltags=card.getTags()
+            local ltags=cardTaken.getTags()
             local monsterName=ltags[1]
             printToAll(monsterName)
             if (validateMonster(monsterList,monsterName)) then
@@ -145,18 +144,17 @@ function setEventsCards()
             else
               table.insert(monsterList,ltags[1])
             end
-
         end
 
         if validate then
           yPos = yPos - 5
-          card.flip()
+          cardTaken.flip()
         else
-          table.insert(notValidCards, card)
+          table.insert(notValidCards, cardTaken)
           indexCards=indexCards-1
 
-          card.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
-          table.insert(notValidCards,card)
+          cardTaken.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
+
         end
     end
 
@@ -190,7 +188,7 @@ function setLastGod()
 
 
   if      god.guid == APOLLO_TILE   then setApollo()
-  elseif  god.guid == HADES_TILE    then setHadesx()
+  elseif  god.guid == HADES_TILE    then setHades()
   elseif  god.guid == POSEIDON_TILE then setPoseidon()
   else
     setHephestos()
@@ -221,7 +219,7 @@ function setHephestos()
    setGodArtefact(godArtefact)
 end
 
-function setHadesx()
+function setHades()
   printToAll("HADES_TILE")
    local deck = getObjectFromGUID(HADES_CARDS)
    setGodsCards(deck)
