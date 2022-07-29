@@ -52,13 +52,10 @@ function setUp(clicked_object, player, color)
       setTempleCards()
 
       randomCards(EVENT_CARDS)
-
       randomCards(PANDORA_CARDS)
-      Wait.time(function()
-        setEventCards()
-        Wait.time(function() setPandora() end , 1, 1)
-        end , 2, 1)
-        
+      setEventCards()
+      Wait.time(function() setPandora() end , 3, 1)
+
       setLastGod()
 
 end
@@ -114,8 +111,6 @@ function setEventCards()
     local deckPos = deck.getPosition()
     local yPos = deckPos[3] - 8
 
-    local notValidCards={}
-
     local questCounter=0
     local indexCards=0
 
@@ -123,7 +118,7 @@ function setEventCards()
     while(indexCards<7)  do
         validate=true
         indexCards=indexCards+1
-        local cardTaken=deck.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+10, yPos}})
+        local cardTaken=deck.takeObject({flip=false,smooth=true, position={deckPos[1], deckPos[2]+10, deckPos[3]}})
         if cardTaken.hasTag("questCard") then
 
           questCounter=questCounter+1
@@ -149,18 +144,12 @@ function setEventCards()
         if validate then
           yPos = yPos - 5
           cardTaken.flip()
-        else
-          table.insert(notValidCards, cardTaken)
+          cardTaken.setPositionSmooth({deckPos[1], deckPos[2] , yPos})
+        else 
           indexCards=indexCards-1
-
-          cardTaken.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
-
         end
     end
 
-    for i, notValidCard in ipairs(notValidCards) do
-      notValidCard.setPosition({deckPos[1], deckPos[2] ,  deckPos[3]})
-    end
 
 end
 
