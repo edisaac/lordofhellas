@@ -33,6 +33,13 @@ HEPHESTOS_ARTEFACT=Global.getVar("HEPHESTOS_ARTEFACT")
 HADES_ARTEFACT=Global.getVar("HADES_ARTEFACT")
 ATHENA_ARTEFACT=Global.getVar("ATHENA_ARTEFACT")
 
+RELIQUIA_DECK=Global.getVar("RELIQUIA_DECK")
+ALUMBRADO_CARD=Global.getVar("ALUMBRADO_CARD")
+
+MUSA_DECK=Global.getVar("MUSA_DECK")
+GODCARD_ZONE=Global.getVar("GODCARD_ZONE")
+GODBOARD_ZONE=Global.getVar("GODBOARD_ZONE")
+POSEIDON_BOARD=Global.getVar("POSEIDON_BOARD")
 function setUp(clicked_object, player, color)
 
      setuplog=setuplog+1
@@ -145,7 +152,7 @@ function setEventCards()
           yPos = yPos - 5
           cardTaken.flip()
           cardTaken.setPositionSmooth({deckPos[1], deckPos[2] , yPos})
-        else 
+        else
           indexCards=indexCards-1
         end
     end
@@ -175,7 +182,7 @@ function setLastGod()
   deckPos[1] = deckPos[1] - 6
   god=godBag.takeObject({smooth=true, position={deckPos[1], deckPos[2]+5, deckPos[3]}})
 
-
+ 
   if      god.guid == APOLLO_TILE   then setApollo()
   elseif  god.guid == HADES_TILE    then setHades()
   elseif  god.guid == POSEIDON_TILE then setPoseidon()
@@ -190,6 +197,16 @@ function setApollo()
    setGodsCards(deck)
    local godArtefact= getObjectFromGUID(APOLLO_ARTEFACT)
    setGodArtefact(godArtefact)
+  local deckPos = getObjectFromGUID(GODCARD_ZONE).getPosition()
+  local musaDeck= getObjectFromGUID(MUSA_DECK)
+  musaDeck.setPosition(deckPos)
+  musaDeck.shuffle()
+
+  for i = 1, 2 do
+      deckPos[1] = deckPos[1] -8
+      musaDeck.takeObject({flip=true, position=deckPos})
+  end
+
 end
 
 function setPoseidon ()
@@ -198,6 +215,7 @@ function setPoseidon ()
      setGodsCards(deck)
      local godArtefact= getObjectFromGUID(POSEIDON_ARTEFACT)
      setGodArtefact(godArtefact)
+
 end
 
 function setHephestos()
@@ -206,6 +224,26 @@ function setHephestos()
    setGodsCards(deck)
    local godArtefact= getObjectFromGUID(HEPHESTOS_ARTEFACT)
    setGodArtefact(godArtefact)
+
+   local deckPos = getObjectFromGUID(GODCARD_ZONE).getPosition()
+   local reliquiaDeck= getObjectFromGUID(RELIQUIA_DECK)
+   reliquiaDeck.setPosition(deckPos)
+   reliquiaDeck.shuffle()
+
+   for i = 1, 3 do
+       deckPos[1] = deckPos[1] -8
+       reliquiaDeck.takeObject({flip=true, position=deckPos})
+   end
+   local alumbradoCard= getObjectFromGUID(ALUMBRADO_CARD)
+    deckPos[1] = deckPos[1] -8
+
+    alumbradoCard.setPosition(deckPos)
+   for i = 1, 4 do
+      local temp = alumbradoCard.clone()
+      temp.setPosition(deckPos)
+      temp.flip()
+   end
+   alumbradoCard.flip()
 end
 
 function setHades()

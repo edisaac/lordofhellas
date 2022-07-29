@@ -14,7 +14,6 @@ PANDORA_CARDS="87df32"
 HEROS_BAG="27afaa"
 GODS_BAG="9403bc"
 
-
 APOLLO_TILE="7ea1b6"
 HADES_TILE="f666d8"
 POSEIDON_TILE="c2707b"
@@ -34,6 +33,14 @@ HADES_ARTEFACT="a03d03"
 ATHENA_ARTEFACT="64854f"
 
 EVENTCARD_ZONE="18a9f5"
+
+RELIQUIA_DECK="7c817e"
+ALUMBRADO_CARD="2d28b3"
+MUSA_DECK="55b7d2"
+
+GODCARD_ZONE="ec1623"
+GODBOARD_ZONE="d4dadc"
+POSEIDON_BOARD="1c42e3"
 --[[ The onLoad event is called after the game save finishes loading. --]]
 function onLoad()
 
