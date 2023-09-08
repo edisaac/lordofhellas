@@ -42,20 +42,20 @@ GODBOARD_ZONE=Global.getVar("GODBOARD_ZONE")
 POSEIDON_BOARD=Global.getVar("POSEIDON_BOARD")
 
 MONSTER_FIGURES = {
-  adrestiaCard= {tile = "83fdfa", figure = "8e8838"},
-  arachneCard= {tile = "xxx", figure = "c13beb"},
-  cerberoCard= {tile = "xxx", figure = "199e8c"},
-  cetusCard= {tile = "xxx", figure = "cb9de8"},
-  chironCard= {tile = "xxx", figure = "b48b93"},
-  ciclopeCard= {tile = "xxx", figure = "848536"},
-  esfingeCard= {tile = "xxx", figure = "5c9b8e"},
-  hidraCard= {tile = "xxx", figure = "2030fe"},
-  medusaCard= {tile = "xxx", figure = "398c4a"},
-  minotauroCard= {tile = "xxx", figure = "230e3e"},
-  pythonCard= {tile = "xxx", figure = "e3b2a7"},
-  quimeraCard= {tile = "xxx", figure = "e5e7bd"},
-  sirenaCard= {tile = "xxx", figure = "1c7ceb"},
-  typhonCard= {tile = "xxx", figure = "c5d145"}
+  adrestiaCard= {tile = "83fdfa", figure = "8e8838",artefact ="f3c98b"},
+  arachneCard= {tile = "328194", figure = "c13beb",artefact="cecef8"},
+  cerberoCard= {tile = "e02036", figure = "199e8c",artefact="17d2fe"},
+  cetusCard= {tile = "e755c6", figure = "cb9de8",artefact="f928d4"},
+  chironCard= {tile = "ed83e1", figure = "b48b93",artefact="6d00b6"},
+  ciclopeCard= {tile = "20b72f", figure = "848536",artefact="9ed304"},
+  esfingeCard= {tile = "e21844", figure = "5c9b8e",artefact="7cfab3"},
+  hidraCard= {tile = "31f47b", figure = "2030fe",artefact="307d8e"},
+  medusaCard= {tile = "318d5b", figure = "398c4a",artefact="5055a4"},
+  minotauroCard= {tile = "71b89e", figure = "230e3e",artefact="583202"},
+  pythonCard= {tile = "ff9a68", figure = "e3b2a7",artefact="660577"},
+  quimeraCard= {tile = "f64ba6", figure = "e5e7bd",artefact="4c51df"},
+  sirenaCard= {tile = "ea5d09", figure = "1c7ceb",artefact="7e256b"},
+  typhonCard= {tile = "c00dac", figure = "c5d145",artefact="8dec4f"}
 }
 
 function setUp(clicked_object, player, color)
