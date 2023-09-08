@@ -245,11 +245,13 @@ function setMonsterPosition ( monsterName,zoneUUID)
   local zone= getObjectFromGUID(zoneUUID)
   local zonePos = zone.getPosition()
 
-
-  zonePos[EJE_Z]=zonePos[EJE_Z]+5
-    
-  monsterFigure.setPositionSmooth(zonePos)
+  Z_POS=zonePos[EJE_Z]
+  zonePos[EJE_Z]=Z_POS+10
   
+  monsterFigure.setPositionSmooth(zonePos)
+  --zonePos[EJE_Z]=Z_POS
+  --monsterFigure.setPosition(zonePos)  
+ 
 end
 
 function filtrarPorCard(tags)
