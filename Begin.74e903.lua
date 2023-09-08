@@ -57,6 +57,31 @@ MONSTER_FIGURES = {
   sirenaCard= {tile = "ea5d09", figure = "1c7ceb",artefact="7e256b"},
   typhonCard= {tile = "c00dac", figure = "c5d145",artefact="8dec4f"}
 }
+
+REGION_ZONES={ 
+_EPIRUS="6600dc",
+_MACEDONIA="9a2ccf",
+_THESSALIA="fee39b",
+_CHALKIDIKI="1c4222",
+_ARCARNANIA="9cf871",
+_AETOLIA="540e72",
+_LOCRIS="a691a1",
+_PHOSIS="8062e5",
+_BOEOTIA="f9c87b",
+_EUBOEA="1003dd",
+_CORINTHIA="6d5229",
+_ATTICA="0c3fe4",
+_ELIS="9436cf",
+_ACHAEA="57b897",
+_ARCADIA="44512d",
+_MESSENIA="c876c1",
+_LACONIA="4f1180",
+_ARGOLIS="f61d7f",
+_CRETE="fb7816"
+}
+
+
+
 EJE_Y=1
 EJE_Z=2
 EJE_X=3
