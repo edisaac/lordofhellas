@@ -85,7 +85,7 @@ EJE_Z=2
 EJE_X=3
 
 function setUp(clicked_object, player, color)
-  --[[
+  
     setuplog=setuplog+1
 
     randomCards(MONSTER_CARDS)
@@ -107,8 +107,8 @@ function setUp(clicked_object, player, color)
     Wait.time(function() setPandora() end , 3, 1)
 
     setLastGod()
-]]
-setEventCards()
+ 
+--setEventCards()
 end
 
 function randomCards(cards)
@@ -151,6 +151,17 @@ function validateMonster(monsterList, monster)
 
 end
 
+function printTags(lista)
+  local resultado = ""
+
+  for i, valor in ipairs(lista) do
+      resultado = resultado .. valor
+      if i ~= #lista then  -- Si no es el último elemento, agrega una coma y un espacio
+          resultado = resultado .. ", "
+      end
+  end
+  print(resultado)
+end
  
 function setEventCards()
     local deck = getObjectFromGUID(EVENT_CARDS)
@@ -180,13 +191,21 @@ function setEventCards()
             local ltags=cardTaken.getTags()
             local tagMostro=filtrarPorCard(ltags)
             local monsterName=tagMostro[1]
+           
+            
             --printToAll(monsterName)
             if (validateMonster(monsterList,monsterName)) then
               validate=false
             else
               table.insert(monsterList,monsterName)
+              printTags(ltags)
+            
+              local zoneUUID=obtenerRegionUUID(ltags)             
               
+
               setMonster(monsterName)
+              setMonsterPosition(monsterName,zoneUUID)
+                           
             end
         end
 
@@ -195,7 +214,7 @@ function setEventCards()
           cardTaken.flip()
           cardTaken.setPositionSmooth({deckPos[1], deckPos[2] , yPos})
  
-
+ 
         else
           indexCards=indexCards-1
         end
@@ -204,28 +223,52 @@ end
 
 function setMonster(monsterName) 
   local monster=  MONSTER_FIGURES[monsterName]
-  local monsterFigure= getObjectFromGUID(monster.tile)
+  local monsterTile= getObjectFromGUID(monster.tile)
   local monsterArtefact= getObjectFromGUID(monster.artefact)
 
-  printToAll(monsterName)
-  local monsterPos = monsterFigure.getPosition()
-  
+ 
+  local monsterPos = monsterTile.getPosition()
    
   monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
   monsterPos[EJE_Y]=monsterPos[EJE_Y]+20
-  monsterFigure.setPositionSmooth(monsterPos)
+  monsterTile.setPositionSmooth(monsterPos)
   monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
   monsterArtefact.setPositionSmooth(monsterPos)
+ 
 end 
 
-function filtrarPorCard(t)
+function setMonsterPosition ( monsterName,zoneUUID)
+  
+  local monster=  MONSTER_FIGURES[monsterName]
+  local monsterFigure= getObjectFromGUID(monster.figure)
+
+  local zone= getObjectFromGUID(zoneUUID)
+  local zonePos = zone.getPosition()
+
+
+  zonePos[EJE_Z]=zonePos[EJE_Z]+5
+    
+  monsterFigure.setPositionSmooth(zonePos)
+  
+end
+
+function filtrarPorCard(tags)
   local resultado = {}
-  for _, v in ipairs(t) do
+  for _, v in ipairs(tags) do
       if string.sub(v, -4) == "Card" then
           table.insert(resultado, v)
       end
   end
   return resultado
+end
+
+function obtenerRegionUUID(tags)
+  for _, tag in ipairs(tags) do
+      if REGION_ZONES[tag] then
+           return REGION_ZONES[tag]
+      end
+  end
+  return nil -- retorna nil si no encuentra ninguna coincidencia
 end
 
 
