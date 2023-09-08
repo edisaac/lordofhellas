@@ -57,6 +57,9 @@ MONSTER_FIGURES = {
   sirenaCard= {tile = "ea5d09", figure = "1c7ceb",artefact="7e256b"},
   typhonCard= {tile = "c00dac", figure = "c5d145",artefact="8dec4f"}
 }
+EJE_Y=1
+EJE_Z=2
+EJE_X=3
 
 function setUp(clicked_object, player, color)
   --[[
@@ -165,23 +168,23 @@ function setEventCards()
           questCounter=questCounter+1
 
           if questCounter>3 then
-             printToAll('questCard:'.. questCounter)
+             --printToAll('questCard:'.. questCounter)
              validate=false
           end
         elseif  cardTaken.hasTag("oportunityCard")   then
-            printToAll('oportunityCard:')
+            --printToAll('oportunityCard:')
             validate=false
         else
             local ltags=cardTaken.getTags()
             local tagMostro=filtrarPorCard(ltags)
             local monsterName=tagMostro[1]
-            printToAll(monsterName)
+            --printToAll(monsterName)
             if (validateMonster(monsterList,monsterName)) then
               validate=false
             else
               table.insert(monsterList,monsterName)
               
-              setMonsterPosition(monsterName)
+              setMonster(monsterName)
             end
         end
 
@@ -197,16 +200,20 @@ function setEventCards()
     end
 end
 
-function setMonsterPosition(monsterName) 
+function setMonster(monsterName) 
   local monster=  MONSTER_FIGURES[monsterName]
-  local monsterFigure= getObjectFromGUID(monster.figure)
-  printToAll(monster.figure)
+  local monsterFigure= getObjectFromGUID(monster.tile)
+  local monsterArtefact= getObjectFromGUID(monster.artefact)
+
+  printToAll(monsterName)
   local monsterPos = monsterFigure.getPosition()
   
-  monsterPos[2]=monsterPos[2]+20
+   
+  monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
+  monsterPos[EJE_Y]=monsterPos[EJE_Y]+20
   monsterFigure.setPositionSmooth(monsterPos)
-  monsterPos[1]=monsterPos[1]+20
-  monsterFigure.setPositionSmooth(monsterPos)    
+  monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
+  monsterArtefact.setPositionSmooth(monsterPos)
 end 
 
 function filtrarPorCard(t)
