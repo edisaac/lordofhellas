@@ -80,8 +80,6 @@ _ARGOLIS="f61d7f",
 _CRETE="fb7816"
 }
 
-
-
 EJE_Y=1
 EJE_Z=2
 EJE_X=3
@@ -153,28 +151,7 @@ function validateMonster(monsterList, monster)
 
 end
 
-function printeventscards()
-  local deck = getObjectFromGUID(EVENT_CARDS)
-  local deckPos = deck.getPosition()
-  local indexCards=0
-  while(indexCards<40)  do
-    indexCards=indexCards+1
-    local cardTaken=deck.takeObject({flip=false,smooth=true, position={deckPos[1], deckPos[2]+10, deckPos[3]}})
-     
-    local lista= cardTaken.getTags()
-    --quiero recorrer todos los tags del deck las cartas del deck  
-      local resultado = ""
-  
-      for i, valor in ipairs(lista) do
-          resultado = resultado .. valor
-          if i ~= #lista then  -- Si no es el último elemento, agrega una coma y un espacio
-              resultado = resultado .. ", "
-          end
-      end
-      print(resultado)
-  end
-end 
-
+ 
 function setEventCards()
     local deck = getObjectFromGUID(EVENT_CARDS)
     local deckPos = deck.getPosition()
