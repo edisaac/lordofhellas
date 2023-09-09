@@ -199,6 +199,7 @@ function setEventCards()
           questCounter=questCounter+1
           if questCounter>3 then
              validate=false
+             indexCards=indexCards+1
           else 
             local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
             local questUUID= obtenerUUIDListado(QUEST_CARDS, ltags)
@@ -217,7 +218,11 @@ function setEventCards()
               local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
               
               setMonster(monsterName)
-              setMonsterPosition(monsterName,zoneUUID)
+              Wait.time(function() 
+                setMonsterPosition(monsterName,zoneUUID)
+                end , indexCards, 1)
+
+              
                            
             end
         end
@@ -261,9 +266,11 @@ function moveToZone(objectUUID, zoneUUID)
   local objectToMove= getObjectFromGUID(objectUUID)
   local zone= getObjectFromGUID(zoneUUID)
   local zonePos = zone.getPosition()
+  
   Z_POS=zonePos[EJE_Z]
   zonePos[EJE_Z]=Z_POS+10
-  objectToMove.setPositionSmooth(zonePos,false,false)
+
+  objectToMove.setPositionSmooth(zonePos)
 end
 
 function filtrarPorCard(tags)
@@ -297,7 +304,7 @@ function setPandora()
 
     for i = 1, 3 do
      deckEvent.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+math.random(1, 20), deckPos[3]}})
-   end
+    end
     deckPandora.takeObject({flip=false,smooth=false, position={deckPos[1], deckPos[2]+math.random(1, 20), deckPos[3]}})
 
 end
@@ -319,19 +326,19 @@ function setLastGod()
 end
 
 function setApollo()
-   printToAll("APOLLO_TILE")
-   local deck = getObjectFromGUID(APOLLO_CARDS)
-   setGodsCards(deck)
-   local godArtefact= getObjectFromGUID(APOLLO_ARTEFACT)
-   setGodArtefact(godArtefact)
+  printToAll("APOLLO_TILE")
+  local deck = getObjectFromGUID(APOLLO_CARDS)
+  setGodsCards(deck)
+  local godArtefact= getObjectFromGUID(APOLLO_ARTEFACT)
+  setGodArtefact(godArtefact)
   local deckPos = getObjectFromGUID(GODCARD_ZONE).getPosition()
   local musaDeck= getObjectFromGUID(MUSA_DECK)
   musaDeck.setPosition(deckPos)
   musaDeck.shuffle()
 
   for i = 1, 2 do
-      deckPos[1] = deckPos[1] -8
-      musaDeck.takeObject({flip=true, position=deckPos})
+    deckPos[1] = deckPos[1] -8
+    musaDeck.takeObject({flip=true, position=deckPos})
   end
 
 end
