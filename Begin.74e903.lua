@@ -193,34 +193,28 @@ function setEventCards()
         validate=true
         indexCards=indexCards+1
         local cardTaken=deck.takeObject({flip=false,smooth=true, position={deckPos[1], deckPos[2]+10, deckPos[3]}})
+        local ltags=cardTaken.getTags()
+
         if cardTaken.hasTag("questCard") then
-
           questCounter=questCounter+1
-
           if questCounter>3 then
-             --printToAll('questCard:'.. questCounter)
              validate=false
           else 
-
+            local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
+            local questUUID= obtenerUUIDListado(QUEST_CARDS, ltags)
+            moveToZone(questUUID,zoneUUID)
           end
         elseif  cardTaken.hasTag("oportunityCard")   then
-            --printToAll('oportunityCard:')
             validate=false
-        else
-            local ltags=cardTaken.getTags()
+        else            
             local tagMostro=filtrarPorCard(ltags)
-            local monsterName=tagMostro[1]
-           
-            
-            --printToAll(monsterName)
+            local monsterName=tagMostro[1]            
             if (validateMonster(monsterList,monsterName)) then
               validate=false
             else
               table.insert(monsterList,monsterName)
-              printTags(ltags)
             
-              local zoneUUID=obtenerRegionUUID(ltags)             
-              
+              local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
               
               setMonster(monsterName)
               setMonsterPosition(monsterName,zoneUUID)
@@ -229,10 +223,10 @@ function setEventCards()
         end
 
         if validate then
+          printTags(ltags)
           yPos = yPos - 5
           cardTaken.flip()
           cardTaken.setPositionSmooth({deckPos[1], deckPos[2] , yPos})
- 
  
         else
           indexCards=indexCards-1
@@ -282,23 +276,15 @@ function filtrarPorCard(tags)
   return resultado
 end
 
-function obtenerRegionUUID(tags)
+function obtenerUUIDListado(listado, tags)
   for _, tag in ipairs(tags) do
-      if REGION_ZONES[tag] then
-           return REGION_ZONES[tag]
+      if listado[tag] then
+           return listado[tag]
       end
   end
   return nil  
 end
-function obtenerQuestUUID(tags)
-  for _, tag in ipairs(tags) do
-    if QUEST_CARDS[tag] then
-         return QUEST_CARDS[tag]
-    end
-  end
-  return nil  
-end 
-
+ 
 
 
 function setPandora()
