@@ -221,7 +221,7 @@ function setEventCards()
             
               local zoneUUID=obtenerRegionUUID(ltags)             
               
-
+              
               setMonster(monsterName)
               setMonsterPosition(monsterName,zoneUUID)
                            
@@ -259,17 +259,18 @@ end
 function setMonsterPosition ( monsterName,zoneUUID)
   
   local monster=  MONSTER_FIGURES[monsterName]
-  local monsterFigure= getObjectFromGUID(monster.figure)
-
-  local zone= getObjectFromGUID(zoneUUID)
-  local zonePos = zone.getPosition()
-
-  Z_POS=zonePos[EJE_Z]
-  zonePos[EJE_Z]=Z_POS+10
-  monsterFigure.setPositionSmooth(zonePos )
- 
+  
+  moveToZone(monster.figure,zoneUUID)
 end
 
+function moveToZone(objectUUID, zoneUUID)
+  local objectToMove= getObjectFromGUID(objectUUID)
+  local zone= getObjectFromGUID(zoneUUID)
+  local zonePos = zone.getPosition()
+  Z_POS=zonePos[EJE_Z]
+  zonePos[EJE_Z]=Z_POS+10
+  objectToMove.setPositionSmooth(zonePos,false,false)
+end
 
 function filtrarPorCard(tags)
   local resultado = {}
