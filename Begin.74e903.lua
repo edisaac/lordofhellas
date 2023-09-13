@@ -213,7 +213,10 @@ function setEventCards()
               local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
               
               setMonster(monsterName)
-              setMonsterPosition(monsterName,zoneUUID)
+              Wait.time(
+                function() 
+                  setMonsterPosition(monsterName,zoneUUID)
+                end , indexCards, 1)
                             
             end
         end
@@ -260,7 +263,7 @@ function moveToZone(objectUUID, zoneUUID)
   local zonePos = zone.getPosition()
   local objectPos = objectToMove.getPosition()
   Z_POS=zonePos[EJE_Z]
-  zonePos[EJE_Z]=Z_POS+5
+  zonePos[EJE_Z]=Z_POS+10
 
   objectToMove.setPositionSmooth(zonePos,false,false) 
     
