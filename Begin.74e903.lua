@@ -50,13 +50,13 @@ MONSTER_FIGURES = {
   ciclopeCard= {tile = "20b72f", figure = "848536",artefact="9ed304"},
   esfingeCard= {tile = "e21844", figure = "5c9b8e",artefact="7cfab3"},
   hidraCard= {tile = "31f47b", figure = "2030fe",artefact="307d8e"},
-  medusaCard= {tile = "318d5b", figure = "398c4a",artefact="5055a4"},
+  medusaCard= {tile = "318d5b", figure = "a31edb",artefact="5055a4"},
   minotauroCard= {tile = "71b89e", figure = "230e3e",artefact="583202"},
-  pythonCard= {tile = "ff9a68", figure = "e3b2a7",artefact="660577"},
+  pythonCard= {tile = "ff9a68", figure = "efa98e",artefact="660577"},
   quimeraCard= {tile = "f64ba6", figure = "e5e7bd",artefact="4c51df"},
   sirenaCard= {tile = "ea5d09", figure = "1c7ceb",artefact="7e256b"},
-  typhonCard= {tile = "c00dac", figure = "c5d145",artefact="8dec4f"}
-}   
+  typhonCard= {tile = "c00dac", figure = "af54b8",artefact="8dec4f"}
+}
 
 REGION_ZONES={ 
 _EPIRUS="6600dc",
@@ -127,14 +127,9 @@ end
 
 function randomCards(cards)
   local cards = getObjectFromGUID(cards)
-  cards.shuffle()
- 
- 
+  cards.shuffle() 
   cards.randomize() 
-
 end
-
-
 
 function setTempleCards()
   local deck = getObjectFromGUID(TEMPLE_CARDS)
@@ -218,12 +213,8 @@ function setEventCards()
               local zoneUUID= obtenerUUIDListado(REGION_ZONES, ltags)             
               
               setMonster(monsterName)
-              
-                setMonsterPosition(monsterName,zoneUUID)
-               
-
-              
-                           
+              setMonsterPosition(monsterName,zoneUUID)
+                            
             end
         end
 
@@ -269,22 +260,10 @@ function moveToZone(objectUUID, zoneUUID)
   local zonePos = zone.getPosition()
   local objectPos = objectToMove.getPosition()
   Z_POS=zonePos[EJE_Z]
-  zonePos[EJE_Z]=Z_POS+20
+  zonePos[EJE_Z]=Z_POS+5
 
   objectToMove.setPositionSmooth(zonePos,false,false) 
     
-  Wait.time(
-    function() 
-      local objnewPos=objectToMove.getPosition()
-      print(objectUUID)
-      print(objnewPos)
-      print(objectPos)  
-       
-        objectToMove.setPosition(zonePos)
-       
-    end , 2, 1)
-      
-
 end
 
 function filtrarPorCard(tags)
