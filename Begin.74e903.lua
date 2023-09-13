@@ -114,7 +114,7 @@ function setUp(clicked_object, player, color)
     randomCards(TEMPLE_CARDS)
     setTempleCards()
  
-    --randomCards(EVENT_CARDS)
+    randomCards(EVENT_CARDS)
     randomCards(PANDORA_CARDS)
     setEventCards()
 
