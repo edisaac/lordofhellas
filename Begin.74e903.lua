@@ -216,7 +216,7 @@ function setEventCards()
               Wait.time(
                 function() 
                   setMonsterPosition(monsterName,zoneUUID)
-                end , indexCards, 1)
+                end , indexCards+4, 1)
                             
             end
         end
@@ -242,11 +242,11 @@ function setMonster(monsterName)
   local monsterPos = monsterTile.getPosition()
    
   monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
-  monsterPos[EJE_Y]=monsterPos[EJE_Y]+20
+  monsterPos[EJE_Y]=monsterPos[EJE_Y]+28
   monsterTile.setPositionSmooth(monsterPos )
   monsterPos[EJE_Z]=monsterPos[EJE_Z]+5
   monsterArtefact.setPositionSmooth(monsterPos )
- 
+
 end 
 
 function setMonsterPosition ( monsterName,zoneUUID)
@@ -261,12 +261,17 @@ function moveToZone(objectUUID, zoneUUID)
   local objectToMove= getObjectFromGUID(objectUUID)
   local zone= getObjectFromGUID(zoneUUID)
   local zonePos = zone.getPosition()
-  local objectPos = objectToMove.getPosition()
-  Z_POS=zonePos[EJE_Z]
-  zonePos[EJE_Z]=Z_POS+10
 
-  objectToMove.setPositionSmooth(zonePos,false,false) 
-    
+  local Z_POS=zonePos[EJE_Z]
+  zonePos[EJE_Z]=Z_POS+20
+ 
+  objectToMove.setPositionSmooth(zonePos,false,false)
+  Wait.time(
+    function() 
+      zonePos[EJE_Z]=Z_POS +1
+      objectToMove.setPositionSmooth(zonePos)  
+    end , 2, 1) 
+ 
 end
 
 function filtrarPorCard(tags)
